@@ -1,0 +1,10 @@
+image: Visual Studio 2019
+
+shallow_clone: true
+
+before_build:
+  - appveyor-retry dotnet restore -v Minimal
+
+build_script:
+  - dotnet build Rebus.SignalR -c Release 
+  - dotnet build Rebus.SignalR.Tests -c Release 
