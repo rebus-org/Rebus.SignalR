@@ -5,9 +5,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Rebus</RootNamespace>
     <AssemblyName>Rebus.SignalR</AssemblyName>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+	 <!--https://github.com/dotnet/aspnetcore/issues/18394
+	 It's not possible to host ASP.NET Core 3.0 (or higher) components in anything other than a .NET Core application or class library. 
+	 If you are using a class library, 
+	 we have documentation on how to reference ASP.NET Core from it but it still requires .NET Core 3.0 or higher and does not support .NET Standard.
+	 -->
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Authors>mookid8000</Authors>
+    <Authors>mookid8000,rsivanov</Authors>
     <PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/Rebus/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://rebus.fm/what-is-rebus/</PackageProjectUrl>
     <PackageDescription>Provides a Rebus-based SignalR backplane</PackageDescription>
@@ -43,10 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config\" />
-    <Folder Include="SignalR\" />
   </ItemGroup>
-  <ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
     <PackageReference Include="rebus" Version="6.0.0" />
+    <PackageReference Include="Rebus.Async" Version="6.0.2" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="$(ProjectDir)..\scripts\patch_assemblyinfo.cmd $(ProjectDir)" />
