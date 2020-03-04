@@ -38,9 +38,8 @@ namespace Rebus.SignalR.Handlers
 		{
 			var serializedHubMessage = new Lazy<SerializedHubMessage>(message.Messages.ToSerializedHubMessage);
 
-			var groupStore = _hubLifetimeManager.GroupConnections[message.GroupName];
-
-			if (groupStore == null || groupStore.Count == 0)
+			HubConnectionStore groupStore;
+			if (!_hubLifetimeManager.GroupConnections.TryGetValue(message.GroupName, out groupStore) || groupStore.Count == 0)
 				return;
 
 			var tasks = new List<Task>();

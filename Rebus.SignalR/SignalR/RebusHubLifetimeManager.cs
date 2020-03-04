@@ -79,7 +79,7 @@ namespace Rebus.SignalR
 				_logger.LogInformation("Publishing AddToGroup<THub> {GroupName} message to Rebus for {ConnectionId}.", groupName, connectionId);
 
 				var command = new AddToGroup<THub>(serverName: ServerName, groupName: groupName, connectionId: connectionId);
-				var ack = await _bus.SendRequest<Ack<THub>>(command).ConfigureAwait(false);
+				var ack = await _bus.PublishRequest<Ack<THub>>(command, externalCancellationToken: cancellationToken).ConfigureAwait(false);
 
 				_logger.LogInformation("Receved response to AddToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
 			}
@@ -115,8 +115,8 @@ namespace Rebus.SignalR
 			Connections.Remove(connection);
 			if (!string.IsNullOrEmpty(connection.UserIdentifier))
 			{
-				var userStore = GroupConnections[connection.UserIdentifier];
-				if (userStore != null)
+				HubConnectionStore userStore; 
+				if (UserConnections.TryGetValue(connection.UserIdentifier, out userStore))
 				{
 					userStore.Remove(connection);
 				}
@@ -152,8 +152,8 @@ namespace Rebus.SignalR
 			var feature = connection.Features.Get<RebusFeature>();
 			feature.Groups.TryRemove(groupName, out _);
 
-			var groupStore = GroupConnections[groupName];
-			if (groupStore != null)
+			HubConnectionStore groupStore; 
+			if (GroupConnections.TryGetValue(groupName, out groupStore))
 			{
 				groupStore.Remove(connection);
 			}
@@ -175,7 +175,7 @@ namespace Rebus.SignalR
 				_logger.LogInformation("Publishing RemoveGroup<THub> {GroupName} message to Rebus for {ConnectionId}.", groupName, connectionId);
 
 				var command = new RemoveFromGroup<THub>(serverName: ServerName, groupName: groupName, connectionId: connectionId);
-				var ack = await _bus.SendRequest<Ack<THub>>(command).ConfigureAwait(false);
+				var ack = await _bus.PublishRequest<Ack<THub>>(command, externalCancellationToken: cancellationToken).ConfigureAwait(false);
 
 				_logger.LogInformation("Receved response to RemoveFromToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
 			}

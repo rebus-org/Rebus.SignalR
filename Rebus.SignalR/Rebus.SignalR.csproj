@@ -53,8 +53,8 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
-    <PackageReference Include="rebus" Version="6.0.0" />
-    <PackageReference Include="Rebus.Async" Version="6.0.2" />
+    <PackageReference Include="rebus" Version="6.0.1" />
+    <PackageReference Include="Rebus.Async" Version="7.1.0" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="$(ProjectDir)..\scripts\patch_assemblyinfo.cmd $(ProjectDir)" />
