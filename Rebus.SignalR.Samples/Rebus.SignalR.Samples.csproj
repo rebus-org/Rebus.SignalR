@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+		<TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+		<GenerateRazorAssemblyInfo>false</GenerateRazorAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Rebus.RabbitMq" Version="6.0.0" />
+    <PackageReference Include="Rebus.ServiceProvider" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rebus.SignalR\Rebus.SignalR.csproj" />
+  </ItemGroup>
+
+</Project>
