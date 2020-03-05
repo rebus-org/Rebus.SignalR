@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rebus.SignalR.Tests.OfficialFramework
 {
-    public static class HubConnectionContextUtils
+    internal static class HubConnectionContextUtils
     {
         public static HubConnectionContext Create(ConnectionContext connection, IHubProtocol protocol = null, string userIdentifier = null)
         {

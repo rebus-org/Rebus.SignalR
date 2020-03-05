@@ -2,7 +2,7 @@
 
 namespace Rebus.SignalR.Tests.Internal
 {
-    public static class EnumeratorExtensions
+    internal static class EnumeratorExtensions
 	{
         public static IEnumerable<T> ToEnumerable<T>(this IEnumerator<T> enumerator)
         {

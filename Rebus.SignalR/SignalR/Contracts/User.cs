@@ -13,8 +13,8 @@ namespace Rebus.SignalR.Contracts
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="messages"></param>
+        /// <param name="userId">User identifier</param>
+        /// <param name="messages">Messages to send</param>
         public User(string userId, IDictionary<string, byte[]> messages)
         {
             UserId = userId;
@@ -22,12 +22,12 @@ namespace Rebus.SignalR.Contracts
         }
 
         /// <summary>
-        /// 
+        /// User identifier
         /// </summary>
         public string UserId { get; }
 
         /// <summary>
-        /// 
+        /// Messages to send
         /// </summary>
         public IDictionary<string, byte[]> Messages { get; }
     }

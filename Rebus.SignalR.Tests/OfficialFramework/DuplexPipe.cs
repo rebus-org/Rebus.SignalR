@@ -2,7 +2,7 @@
 
 namespace Rebus.SignalR.Tests.OfficialFramework
 {
-    public sealed class DuplexPipe : IDuplexPipe
+    internal sealed class DuplexPipe : IDuplexPipe
     {
         public DuplexPipe(PipeReader reader, PipeWriter writer)
         {

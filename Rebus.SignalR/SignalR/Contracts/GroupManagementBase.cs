@@ -12,9 +12,9 @@ namespace Rebus.SignalR.Contracts
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="serverName"></param>
-        /// <param name="groupName"></param>
-        /// <param name="connectionId"></param>
+		/// <param name="serverName">The name of the server, that sent a request</param>
+		/// <param name="groupName">Group name</param>
+		/// <param name="connectionId">Connection identifier</param>
         public GroupManagementBase(string serverName, string groupName, string connectionId)
         {
             ServerName = serverName;
@@ -23,17 +23,17 @@ namespace Rebus.SignalR.Contracts
         }
 
         /// <summary>
-        /// Gets the ServerName of the group command.
+        /// The name of the server, that sent a request
         /// </summary>
         public string ServerName { get; }
 
         /// <summary>
-        /// Gets the group on which the action is performed.
+        /// Group name
         /// </summary>
         public string GroupName { get; }
 
         /// <summary>
-        /// Gets the ID of the connection to be added or removed from the group.
+        /// Connection identifier
         /// </summary>
         public string ConnectionId { get; }
     }

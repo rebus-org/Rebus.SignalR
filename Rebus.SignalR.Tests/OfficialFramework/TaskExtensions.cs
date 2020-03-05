@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rebus.SignalR.Tests.OfficialFramework
 {
-    public static class TaskExtensions
+    internal static class TaskExtensions
     {
         private const int DefaultTimeout = 30 * 1000;
 

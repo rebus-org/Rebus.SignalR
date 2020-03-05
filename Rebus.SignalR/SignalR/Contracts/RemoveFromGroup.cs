@@ -10,11 +10,8 @@ namespace Rebus.SignalR.Contracts
 		where THub : Hub
 	{
 		/// <summary>
-		/// Constructor
+		/// <inheritdoc/>
 		/// </summary>
-		/// <param name="serverName"></param>
-		/// <param name="groupName"></param>
-		/// <param name="connectionId"></param>
 		public RemoveFromGroup(string serverName, string groupName, string connectionId) : base(serverName, groupName, connectionId)
 		{
 		}

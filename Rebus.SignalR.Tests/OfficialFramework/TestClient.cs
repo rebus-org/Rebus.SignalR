@@ -14,7 +14,7 @@ namespace Rebus.SignalR.Tests.OfficialFramework
     /// <summary>
     /// 
     /// </summary>
-    public sealed class TestClient : ITransferFormatFeature, IConnectionHeartbeatFeature, IDisposable
+    internal sealed class TestClient : ITransferFormatFeature, IConnectionHeartbeatFeature, IDisposable
     {
         private readonly object _heartbeatLock = new object();
         private List<(Action<object> handler, object state)> _heartbeatHandlers;

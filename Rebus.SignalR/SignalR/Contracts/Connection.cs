@@ -13,8 +13,8 @@ namespace Rebus.SignalR.Contracts
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <param name="messages"></param>
+        /// <param name="connectionId">Connection identifier</param>
+        /// <param name="messages">Messages to send</param>
         public Connection(string connectionId, IDictionary<string, byte[]> messages)
         {
             ConnectionId = connectionId;
@@ -22,12 +22,12 @@ namespace Rebus.SignalR.Contracts
         }
 
         /// <summary>
-        /// 
+        /// Connection identifier
         /// </summary>
         public string ConnectionId { get; }
 
         /// <summary>
-        /// 
+        /// Messages to send
         /// </summary>
         public IDictionary<string, byte[]> Messages { get; }
     }

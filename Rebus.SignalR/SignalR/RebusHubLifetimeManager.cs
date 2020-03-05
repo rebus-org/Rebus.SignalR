@@ -22,7 +22,6 @@ namespace Rebus.SignalR
 	{
 		private readonly IBus _bus;
 		private readonly ILogger _logger;
-
 		private readonly IReadOnlyList<IHubProtocol> _protocols;
 
 		/// <summary>

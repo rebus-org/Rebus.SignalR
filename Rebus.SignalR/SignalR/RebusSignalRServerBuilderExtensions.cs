@@ -9,7 +9,7 @@ using Rebus.SignalR.Handlers;
 namespace Rebus.SignalR
 {
     /// <summary>
-    /// 
+    /// Dependency injection extensions
     /// </summary>
 	public static class RebusSignalRServerBuilderExtensions
 	{

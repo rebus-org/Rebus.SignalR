@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Rebus.Internals
 {
     /// <summary>
-    /// 
+    /// A helper class for working with SignalR protocol messages
     /// </summary>
     public static class SerializedHubMessageExtensions
     {

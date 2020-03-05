@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Rebus.SignalR.Tests.OfficialFramework
 {
-    public sealed class MemoryBufferWriter : Stream, IBufferWriter<byte>
+    internal sealed class MemoryBufferWriter : Stream, IBufferWriter<byte>
     {
         [ThreadStatic]
         private static MemoryBufferWriter _cachedInstance;

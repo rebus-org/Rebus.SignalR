@@ -10,16 +10,16 @@ namespace Rebus.SignalR.Contracts
         where THub : Hub
     {
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
-        /// <param name="serverName"></param>
+        /// <param name="serverName">The name of the server, that replies with an Ack</param>
         public Ack(string serverName)
         {
             ServerName = serverName;
         }
 
         /// <summary>
-        /// 
+        /// The name of the server, that replies with an Ack
         /// </summary>
         public string ServerName { get; }
     }
