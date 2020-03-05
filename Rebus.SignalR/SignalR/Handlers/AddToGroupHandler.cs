@@ -39,7 +39,7 @@ namespace Rebus.SignalR.Handlers
 			if (connection == null)
 				return Task.CompletedTask;
 
-			_hubLifetimeManager.AddGroupLocal(connection, message.GroupName);
+			_hubLifetimeManager.AddToGroupLocal(connection, message.GroupName);
 
 			return _bus.Reply(new Ack<THub>(serverName: _hubLifetimeManager.ServerName));
 		}

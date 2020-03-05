@@ -36,7 +36,7 @@ namespace Rebus.SignalR
 		/// </summary>
 		/// <param name="connection"></param>
 		/// <param name="groupName"></param>
-		void AddGroupLocal(HubConnectionContext connection, string groupName);
+		void AddToGroupLocal(HubConnectionContext connection, string groupName);
 
 		/// <summary>
 		/// Removes a connection from a group locally

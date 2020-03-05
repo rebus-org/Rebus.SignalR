@@ -284,7 +284,7 @@ namespace Rebus.SignalR.Tests
 				Assert.Null(publishedEvent.ExcludedConnectionIds);
 
 				var groupHandler = new GroupHandler<TestHub>(hubLifetimeManager, NullLogger<GroupHandler<TestHub>>.Instance);
-				hubLifetimeManager.AddGroupLocal(connection, groupName);
+				hubLifetimeManager.AddToGroupLocal(connection, groupName);
 
 				await groupHandler.Handle(publishedEvent);
 
@@ -318,7 +318,7 @@ namespace Rebus.SignalR.Tests
 				Assert.True(publishedEvent.ExcludedConnectionIds?.Length == 1 && publishedEvent.ExcludedConnectionIds[0] == connection.ConnectionId);
 
 				var groupHandler = new GroupHandler<TestHub>(hubLifetimeManager, NullLogger<GroupHandler<TestHub>>.Instance);
-				hubLifetimeManager.AddGroupLocal(connection, groupName);
+				hubLifetimeManager.AddToGroupLocal(connection, groupName);
 
 				await groupHandler.Handle(publishedEvent);
 
@@ -460,7 +460,7 @@ namespace Rebus.SignalR.Tests
 
 				var removeFromGroupCommand = new RemoveFromGroup<TestHub>("localhost", "group", connection.ConnectionId);
 
-				hubLifetimeManager.AddGroupLocal(connection, removeFromGroupCommand.GroupName);
+				hubLifetimeManager.AddToGroupLocal(connection, removeFromGroupCommand.GroupName);
 
 				var removeFromGroupHandler = new RemoveFromGroupHandler<TestHub>(hubLifetimeManager, fakeBus);
 

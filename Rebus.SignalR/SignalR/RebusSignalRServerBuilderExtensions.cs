@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Rebus.Bus;
 using Rebus.Handlers;
 using Rebus.SignalR.Contracts;
 using Rebus.SignalR.Handlers;
@@ -12,23 +14,10 @@ namespace Rebus.SignalR
 	public static class RebusSignalRServerBuilderExtensions
 	{
         /// <summary>
-        /// Registers the Rebus Hub Lifetime Manager
+        /// Registers the Rebus Hub Lifetime Manager for specified THub
         /// </summary>
         /// <param name="signalRServerBuilder">The SignalR builder abstraction for configuring SignalR servers.</param>
-        public static ISignalRServerBuilder AddRebusBackplane(this ISignalRServerBuilder signalRServerBuilder)
-        {
-            signalRServerBuilder.Services.AddSingleton(typeof(HubLifetimeManager<>), typeof(RebusHubLifetimeManager<>));
-
-            return signalRServerBuilder;
-        }
-
-        /// <summary>
-        /// Register Rebus SignalR handlers for backplane commands
-        /// </summary>
-        /// <typeparam name="THub"></typeparam>
-        /// <param name="signalRServerBuilder"></param>
-        /// <returns></returns>
-        public static ISignalRServerBuilder AddRebusBackplaneHandlers<THub>(this ISignalRServerBuilder signalRServerBuilder)
+        public static ISignalRServerBuilder AddRebusBackplane<THub>(this ISignalRServerBuilder signalRServerBuilder)
             where THub : Hub
         {
             signalRServerBuilder.Services.AddTransient<IHandleMessages<AddToGroup<THub>>, AddToGroupHandler<THub>>();
@@ -37,6 +26,24 @@ namespace Rebus.SignalR
             signalRServerBuilder.Services.AddTransient<IHandleMessages<Connection<THub>>, ConnectionHandler<THub>>();
             signalRServerBuilder.Services.AddTransient<IHandleMessages<Group<THub>>, GroupHandler<THub>>();
             signalRServerBuilder.Services.AddTransient<IHandleMessages<User<THub>>, UserHandler<THub>>();
+
+            signalRServerBuilder.Services.AddSingleton<HubLifetimeManager<THub>, RebusHubLifetimeManager<THub>>(sp => 
+            {
+                var bus = sp.GetService<IBus>();
+                var hubProtocolResolver = sp.GetService<IHubProtocolResolver>();
+                var logger = sp.GetService<ILogger<RebusHubLifetimeManager<THub>>>();
+
+                bus.Subscribe<AddToGroup<THub>>();
+                bus.Subscribe<RemoveFromGroup<THub>>();
+                bus.Subscribe<All<THub>>();
+                bus.Subscribe<Connection<THub>>();
+                bus.Subscribe<Group<THub>>();
+                bus.Subscribe<User<THub>>();
+
+                var rebusHubLifetimeManager = new RebusHubLifetimeManager<THub>(bus, hubProtocolResolver, logger);
+
+                return rebusHubLifetimeManager;
+            });
 
             return signalRServerBuilder;
         }

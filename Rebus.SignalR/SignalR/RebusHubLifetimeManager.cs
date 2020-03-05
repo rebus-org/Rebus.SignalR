@@ -135,7 +135,7 @@ namespace Rebus.SignalR
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public void AddGroupLocal(HubConnectionContext connection, string groupName)
+		public void AddToGroupLocal(HubConnectionContext connection, string groupName)
 		{
 			var feature = connection.Features.Get<RebusFeature>();
 			feature.Groups.TryAdd(groupName, true);
