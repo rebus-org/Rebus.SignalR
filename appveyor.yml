@@ -13,4 +13,7 @@ build_script:
 test: off
 
 test_script:
-  - ps: dotnet test Rebus.SignalR.Tests/Rebus.SignalR.Tests.csproj -c Release --logger:Appveyor --no-build
+- cmd: cd Rebus.SignalR.Tests
+- cmd: nuget install Appveyor.TestLogger -Version 2.0.0
+- cmd: cd ..
+- cmd: dotnet test Rebus.SignalR.Tests/Rebus.SignalR.Tests.csproj -c Release --logger:Appveyor --no-build
