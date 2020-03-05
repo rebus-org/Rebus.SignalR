@@ -13,4 +13,4 @@ build_script:
 test: off
 
 test_script:
-  - ps: dotnet test Rebus.SignalR.Tests/Rebus.SignalR.Tests.csproj --logger:Appveyor --no-build
+  - ps: dotnet test Rebus.SignalR.Tests/Rebus.SignalR.Tests.csproj -c Release --logger:Appveyor --no-build
