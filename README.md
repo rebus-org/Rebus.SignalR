@@ -6,16 +6,15 @@ Rebus-based SignalR backplane... useful, if you are using Rebus already and/or w
 
 How to use
 ====
-Just add AddRebusBackplane<THub>() method call for each hub, that you're going to use with Rebus.SignalR backplane.
+Just add AddRebusBackplane&lt;THub&gt;() method call for each hub, that you're going to use with Rebus.SignalR backplane.
 ```csharp
-    services.AddSignalR()
-        .AddRebusBackplane<ChatHub>();
+services.AddSignalR()
+    .AddRebusBackplane<ChatHub>();
 ```
 
 Configure Rebus IBus as usual, but keep in mind several things:
 * Use an auto generated unique name for the input queue, that will be used as a backplane. In case of Rebus.RabbitMq you should probably configure the input queue as auto-delete. 
-* Enable Rebus.Async with EnableSynchronousRequestReply method call, if you're going to use AddToGroupAsync and RemoveFromGroupAsync in SignalR hubs. 
-
+* Enable Rebus.Async with EnableSynchronousRequestReply() method call, if you're going to use AddToGroupAsync() and RemoveFromGroupAsync() in SignalR hubs. 
 
 Sample application
 ====
