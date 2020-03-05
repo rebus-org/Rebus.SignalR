@@ -102,7 +102,32 @@ namespace Rebus.SignalR.Tests
 		}
 
 		[Test]
-		public async Task AddToGroupAsync_PublishesAddToGroupCommandToBus()
+		public async Task AddToGroupAsync_WhenConnectionDoesntExist_PublishesAddToGroupCommandToBus()
+		{
+			using (var client = new TestClient())
+			{
+				var connection = HubConnectionContextUtils.Create(connection: client.Connection, userIdentifier: null);
+
+				var fakeBus = new FakeBus();
+
+				var (hubLifetimeManager, bus) = ArrangeRebusLifetimeManager(fakeBus);
+
+				var groupName = "group";
+
+				using (var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(0.5)))
+				{
+					await hubLifetimeManager.AddToGroupAsync(connection.ConnectionId, groupName, cancellationTokenSource.Token);
+				}
+
+				var publishedEvent = fakeBus.Events.OfType<MessagePublished>().Select(m => m.EventMessage).OfType<AddToGroup<TestHub>>().FirstOrDefault();
+
+				Assert.NotNull(publishedEvent);
+				Assert.True(publishedEvent.ConnectionId == connection.ConnectionId && publishedEvent.GroupName == groupName);
+			}
+		}
+
+		[Test]
+		public async Task AddToGroupAsync_WhenConnectionExists_AddsConnectionToGroupStore()
 		{
 			using (var client = new TestClient())
 			{
@@ -121,15 +146,14 @@ namespace Rebus.SignalR.Tests
 					await hubLifetimeManager.AddToGroupAsync(connection.ConnectionId, groupName, cancellationTokenSource.Token);
 				}
 
-				var publishedEvent = fakeBus.Events.OfType<MessagePublished>().Select(m => m.EventMessage).OfType<AddToGroup<TestHub>>().FirstOrDefault();
-
-				Assert.NotNull(publishedEvent);
-				Assert.True(publishedEvent.ConnectionId == connection.ConnectionId && publishedEvent.GroupName == groupName);
+				HubConnectionStore groupStore;
+				Assert.True(hubLifetimeManager.GroupConnections.TryGetValue(groupName, out groupStore));
+				Assert.True(groupStore.GetEnumerator().ToEnumerable().Contains(connection));
 			}
 		}
 
 		[Test]
-		public async Task RemoveFromGroupAsync_PublishesRemoveFromGroupCommandToBus()
+		public async Task RemoveFromGroupAsync_WhenConnectionDoesntExist_PublishesRemoveFromGroupCommandToBus()
 		{
 			using (var client = new TestClient())
 			{
@@ -138,8 +162,6 @@ namespace Rebus.SignalR.Tests
 				var fakeBus = new FakeBus();
 
 				var (hubLifetimeManager, bus) = ArrangeRebusLifetimeManager(fakeBus);
-
-				await hubLifetimeManager.OnConnectedAsync(connection).OrTimeout();
 
 				var groupName = "group";
 
@@ -155,6 +177,33 @@ namespace Rebus.SignalR.Tests
 			}
 		}
 
+		[Test]
+		public async Task RemoveFromGroupAsync_WhenConnectionExists_RemovesConnectionFromGroupStore()
+		{
+			using (var client = new TestClient())
+			{
+				var connection = HubConnectionContextUtils.Create(connection: client.Connection, userIdentifier: null);
+
+				var fakeBus = new FakeBus();
+
+				var (hubLifetimeManager, bus) = ArrangeRebusLifetimeManager(fakeBus);
+
+				await hubLifetimeManager.OnConnectedAsync(connection).OrTimeout();
+
+				var groupName = "group";
+
+				hubLifetimeManager.AddToGroupLocal(connection, groupName);
+
+				using (var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(0.5)))
+				{
+					await hubLifetimeManager.RemoveFromGroupAsync(connection.ConnectionId, groupName, cancellationTokenSource.Token);
+				}
+
+				HubConnectionStore groupStore;
+				Assert.True(hubLifetimeManager.GroupConnections.TryGetValue(groupName, out groupStore));
+				Assert.False(groupStore.GetEnumerator().ToEnumerable().Contains(connection));
+			}
+		}
 		[Test]
 		public async Task SendAllAsync_PublishesAllCommandToBusAndHandlerWritesInvocationToClient()
 		{

@@ -73,6 +73,13 @@ namespace Rebus.SignalR
 			if (groupName == null)
 				throw new ArgumentNullException(nameof(groupName));
 
+			var connection = Connections[connectionId];
+			if (connection != null)
+			{
+				AddToGroupLocal(connection, groupName);
+				return;
+			}
+
 			try
 			{
 				_logger.LogInformation("Publishing AddToGroup<THub> {GroupName} message to Rebus for {ConnectionId}.", groupName, connectionId);
@@ -168,6 +175,13 @@ namespace Rebus.SignalR
 
 			if (groupName == null)
 				throw new ArgumentNullException(nameof(groupName));
+
+			var connection = Connections[connectionId];
+			if (connection != null)
+			{
+				RemoveFromGroupLocal(connection, groupName);
+				return;
+			}
 
 			try
 			{
