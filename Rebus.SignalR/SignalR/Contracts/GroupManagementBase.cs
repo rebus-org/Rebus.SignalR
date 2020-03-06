@@ -15,7 +15,7 @@ namespace Rebus.SignalR.Contracts
 		/// <param name="serverName">The name of the server, that sent a request</param>
 		/// <param name="groupName">Group name</param>
 		/// <param name="connectionId">Connection identifier</param>
-        public GroupManagementBase(string serverName, string groupName, string connectionId)
+        protected GroupManagementBase(string serverName, string groupName, string connectionId)
         {
             ServerName = serverName;
             GroupName = groupName;

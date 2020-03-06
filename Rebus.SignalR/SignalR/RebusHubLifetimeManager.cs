@@ -87,7 +87,7 @@ namespace Rebus.SignalR
 				var command = new AddToGroup<THub>(serverName: ServerName, groupName: groupName, connectionId: connectionId);
 				var ack = await _bus.PublishRequest<Ack<THub>>(command, externalCancellationToken: cancellationToken).ConfigureAwait(false);
 
-				_logger.LogInformation("Receved response to AddToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
+				_logger.LogInformation("Received response to AddToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
 			}
 			catch (TaskCanceledException e)
 			{
@@ -121,8 +121,7 @@ namespace Rebus.SignalR
 			Connections.Remove(connection);
 			if (!string.IsNullOrEmpty(connection.UserIdentifier))
 			{
-				HubConnectionStore userStore; 
-				if (UserConnections.TryGetValue(connection.UserIdentifier, out userStore))
+				if (UserConnections.TryGetValue(connection.UserIdentifier, out var userStore))
 				{
 					userStore.Remove(connection);
 				}
@@ -158,8 +157,7 @@ namespace Rebus.SignalR
 			var feature = connection.Features.Get<RebusFeature>();
 			feature.Groups.TryRemove(groupName, out _);
 
-			HubConnectionStore groupStore; 
-			if (GroupConnections.TryGetValue(groupName, out groupStore))
+			if (GroupConnections.TryGetValue(groupName, out var groupStore))
 			{
 				groupStore.Remove(connection);
 			}
@@ -190,7 +188,7 @@ namespace Rebus.SignalR
 				var command = new RemoveFromGroup<THub>(serverName: ServerName, groupName: groupName, connectionId: connectionId);
 				var ack = await _bus.PublishRequest<Ack<THub>>(command, externalCancellationToken: cancellationToken).ConfigureAwait(false);
 
-				_logger.LogInformation("Receved response to RemoveFromToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
+				_logger.LogInformation("Received response to RemoveFromToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
 			}
 			catch (TaskCanceledException e)
 			{
@@ -242,22 +240,20 @@ namespace Rebus.SignalR
 			if (connectionIds == null)
 				throw new ArgumentNullException(nameof(connectionIds));
 
-			if (connectionIds.Count > 0)
+			if (connectionIds.Count == 0) 
+				return Task.CompletedTask;
+			
+			var messages = _protocols.ToProtocolDictionary(methodName, args);
+			var publishTasks = new List<Task>(connectionIds.Count);
+
+			_logger.LogInformation("Publishing multiple Connection<THub> messages {MethodName} to Rebus.", methodName);
+			foreach (var connectionId in connectionIds)
 			{
-				var messages = _protocols.ToProtocolDictionary(methodName, args);
-				var publishTasks = new List<Task>(connectionIds.Count);
-
-				_logger.LogInformation("Publishing multiple Connection<THub> messages {MethodName} to Rebus.", methodName);
-				foreach (var connectionId in connectionIds)
-				{
-					var command = new Connection<THub>(connectionId: connectionId, messages: messages);
-					publishTasks.Add(_bus.Publish(command));
-				}
-
-				return Task.WhenAll(publishTasks);
+				var command = new Connection<THub>(connectionId: connectionId, messages: messages);
+				publishTasks.Add(_bus.Publish(command));
 			}
 
-			return Task.CompletedTask;
+			return Task.WhenAll(publishTasks);
 		}
 
 		/// <summary>
@@ -296,25 +292,23 @@ namespace Rebus.SignalR
 			if (groupNames == null)
 				throw new ArgumentNullException(nameof(groupNames));
 
-			if (groupNames.Count > 0)
+			if (groupNames.Count == 0) 
+				return Task.CompletedTask;
+			
+			var messages = _protocols.ToProtocolDictionary(methodName, args);
+			var publishTasks = new List<Task>(groupNames.Count);
+
+			_logger.LogInformation("Publishing multiple Group<THub> messages {MethodName} to Rebus.", methodName);
+			foreach (var groupName in groupNames)
 			{
-				var messages = _protocols.ToProtocolDictionary(methodName, args);
-				var publishTasks = new List<Task>(groupNames.Count);
-
-				_logger.LogInformation("Publishing multiple Group<THub> messages {MethodName} to Rebus.", methodName);
-				foreach (var groupName in groupNames)
+				if (groupName != null)
 				{
-					if (groupName != null)
-					{
-						var command = new Group<THub>(groupName: groupName, excludedConnectionIds: null, messages: messages);
-						publishTasks.Add(_bus.Publish(command));
-					}
+					var command = new Group<THub>(groupName: groupName, excludedConnectionIds: null, messages: messages);
+					publishTasks.Add(_bus.Publish(command));
 				}
-
-				return Task.WhenAll(publishTasks);
 			}
 
-			return Task.CompletedTask;
+			return Task.WhenAll(publishTasks);
 		}
 
 		/// <summary>
@@ -338,25 +332,23 @@ namespace Rebus.SignalR
 			if (userIds == null)
 				throw new ArgumentNullException(nameof(userIds));
 
-			if (userIds.Count > 0)
+			if (userIds.Count == 0) 
+				return Task.CompletedTask;
+			
+			var messages = _protocols.ToProtocolDictionary(methodName, args);
+			var publishTasks = new List<Task>(userIds.Count);
+
+			_logger.LogInformation("Publishing multiple User<THub> messages {MethodName} to Rebus.", methodName);
+			foreach (var userId in userIds)
 			{
-				var messages = _protocols.ToProtocolDictionary(methodName, args);
-				var publishTasks = new List<Task>(userIds.Count);
-
-				_logger.LogInformation("Publishing multiple User<THub> messages {MethodName} to Rebus.", methodName);
-				foreach (var userId in userIds)
+				if (userId != null)
 				{
-					if (userId != null)
-					{
-						var command = new User<THub>(userId: userId, messages: messages);
-						publishTasks.Add(_bus.Publish(command));
-					}
+					var command = new User<THub>(userId: userId, messages: messages);
+					publishTasks.Add(_bus.Publish(command));
 				}
-
-				return Task.WhenAll(publishTasks);
 			}
 
-			return Task.CompletedTask;
+			return Task.WhenAll(publishTasks);
 		}
 	}
 }
