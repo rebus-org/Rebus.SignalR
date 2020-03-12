@@ -11,12 +11,13 @@ Just add AddRebusBackplane&lt;THub&gt;() method call for each hub, that you're g
 services.AddSignalR()
     .AddRebusBackplane<ChatHub>();
 ```
-
+ 
 Configure Rebus IBus as usual, but keep in mind several things:
 * Use an auto generated unique name for the input queue, that will be used as a backplane. In case of Rebus.RabbitMq you should probably configure the input queue as auto-delete. 
-* Enable Rebus.Async with EnableSynchronousRequestReply() method call, if you're going to use AddToGroupAsync() and RemoveFromGroupAsync() in SignalR hubs. 
+* Enable Rebus.Async with EnableSynchronousRequestReply() method call, if you're going to use AddToGroupAsync() and RemoveFromGroupAsync() in SignalR hubs.
+* If you're using a decentralized subscription storage, for example Sql Server configured with isCentralized option set to false (by default), you have to map Rebus.SignalR backplane commands for each hub to your queue. To do that, just call MapSignalRCommands&lt;THub&gt;() extension method for type-based router: 
 
-Sample application
+Sample application 1 (RabbitMq is used as a transport with the centralized subscription storage)
 ====
 ```csharp
 private static string GenerateTransientQueueName(string inputQueueName)
@@ -41,6 +42,24 @@ public void ConfigureServices(IServiceCollection services)
         })
         .Options(o => o.EnableSynchronousRequestReply())
         .Routing(r => r.TypeBased()));
+}
+```
+
+Sample application 2 (SQL Server is used as a transport with the decentralized subscription storage)
+====
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+	services.AddSignalR()
+        .AddRebusBackplane<ChatHub>();
+
+	var queueName = GenerateTransientQueueName("Rebus.SignalR");
+	services.AddRebus(configure => configure
+		.Transport(x => x.UseSqlServer(SignalRBackplaneConnectionString, queueName, isCentralized: false))
+        .Options(o => o.EnableSynchronousRequestReply())
+        .Routing(r => r.TypeBased()
+            .MapSignalRCommands<ChatHub>(queueName))
+		.Subscriptions(s => s.StoreInSqlServer(SignalRBackplaneConnectionString, "Subscriptions", false)));                    
 }
 ```
 
