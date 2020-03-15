@@ -2,7 +2,7 @@
 
 [![install from nuget](https://img.shields.io/nuget/v/Rebus.SignalR.svg?style=flat-square)](https://www.nuget.org/packages/Rebus.SignalR)
 
-Rebus-based SignalR backplane... useful, if you are using Rebus already and/or would like to leverage Rebus' integration with various transports not supported by SignalR's own backplane integrations.
+Rebus-based SignalR backplane is useful, if you are using Rebus already and/or would like to leverage Rebus' integration with various transports not supported by SignalR's own backplane integrations.
 
 How to use
 ====
@@ -19,10 +19,15 @@ Configure Rebus IBus as usual, but keep in mind several things:
 
 Sample application 1 (RabbitMq is used as a transport with the centralized subscription storage)
 ====
+If you have RabbitMq already installed locally, you can run Rebus.SignalR.Samples from your IDE or using "dotnet run" command. Another option is to use [Docker Compose](https://hub.docker.com/search?q=&type=edition&offering=community&sort=updated_at&order=desc) command from the root repostory directory:
+```
+docker-compose up
+```
+
 ```csharp
 private static string GenerateTransientQueueName(string inputQueueName)
 {
-    return $"{inputQueueName}-{Environment.MachineName}-{Guid.NewGuid()}";
+    return $"{inputQueueName}-{Environment.MachineName}-{Guid.NewGuid().ToString()}";
 }
 
 public void ConfigureServices(IServiceCollection services)
@@ -30,10 +35,15 @@ public void ConfigureServices(IServiceCollection services)
     services.AddSignalR()
         .AddRebusBackplane<ChatHub>();
 
+    var rabbitMqOptions = Configuration.GetSection(nameof(RabbitMqOptions)).Get<RabbitMqOptions>();
+            
+    var rabbitMqConnectionString =
+        $"amqp://{rabbitMqOptions.User}:{rabbitMqOptions.Password}@{rabbitMqOptions.Host}:{rabbitMqOptions.Port.ToString()}";
+
     services.AddRebus(configure => configure
         .Transport(x =>
         {
-            x.UseRabbitMq("amqp://guest:guest@localhost:5672", GenerateTransientQueueName("Rebus.SignalR"))
+            x.UseRabbitMq(rabbitMqConnectionString, GenerateTransientQueueName("Rebus.SignalR"))
             .InputQueueOptions(o =>
             {
                 o.SetAutoDelete(true);
@@ -47,6 +57,7 @@ public void ConfigureServices(IServiceCollection services)
 
 Sample application 2 (SQL Server is used as a transport with the decentralized subscription storage)
 ====
+You can modify Rebus.SignalR.Samples application to try out SqlServer transport:
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
