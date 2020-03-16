@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+    - "15672:15672"
+    - "5672:5672"
+    
+  signalr-samples:
+    build: .
+    ports:
+    - "5100:80"
+    depends_on:
+      - rabbitmq
+    volumes:
+    - "./scripts/wait-for-it.sh:/app/wait-for-it.sh"
+    entrypoint: "./wait-for-it.sh rabbitmq:5672 -t 60 -- dotnet Rebus.SignalR.Samples.dll"

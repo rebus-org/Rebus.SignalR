@@ -19,7 +19,7 @@ Configure Rebus IBus as usual, but keep in mind several things:
 
 Sample application 1 (RabbitMq is used as a transport with the centralized subscription storage)
 ====
-If you have RabbitMq already installed locally, you can run Rebus.SignalR.Samples from your IDE or using "dotnet run" command. Another option is to use [Docker Compose](https://hub.docker.com/search?q=&type=edition&offering=community&sort=updated_at&order=desc) command from the root repostory directory:
+If you have RabbitMq already installed locally, you can run Rebus.SignalR.Samples from your IDE or using "dotnet run" command. Another option is to use [Docker Compose](https://hub.docker.com/search?q=&type=edition&offering=community&sort=updated_at&order=desc) command from the root repository directory:
 ```
 docker-compose up
 ```
