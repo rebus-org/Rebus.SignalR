@@ -41,4 +41,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Rebus.SignalR\Rebus.SignalR.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties" />
+  </ItemGroup>
 </Project>
