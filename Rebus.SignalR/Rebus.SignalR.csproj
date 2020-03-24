@@ -12,7 +12,7 @@
 		-->
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<AssemblyVersion>0.0.4</AssemblyVersion>
+		<AssemblyVersion>0.0.5</AssemblyVersion>
 		<Authors>mookid8000,rsivanov</Authors>
 		<PackageVersion>$(AssemblyVersion)</PackageVersion>
 		<PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/Rebus/master/LICENSE.md</PackageLicenseUrl>
@@ -51,7 +51,6 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>$(AssemblyName).Tests</_Parameter1>
 		</AssemblyAttribute>
-		<Folder Include="Properties" />
 	</ItemGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />

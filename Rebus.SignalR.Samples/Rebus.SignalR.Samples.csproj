@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Rebus.RabbitMq" Version="6.0.0" />
-    <PackageReference Include="Rebus.ServiceProvider" Version="5.0.2" />
+    <PackageReference Include="Rebus.RabbitMq" Version="6.1.0" />
+    <PackageReference Include="Rebus.ServiceProvider" Version="5.0.5" />
   </ItemGroup>
 
   <ItemGroup>

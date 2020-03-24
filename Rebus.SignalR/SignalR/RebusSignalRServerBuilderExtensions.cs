@@ -41,6 +41,17 @@ namespace Rebus.SignalR
                 syncBus.Subscribe<Group<THub>>();
                 syncBus.Subscribe<User<THub>>();
 
+                var busLifetimeEvents = sp.GetService<BusLifetimeEvents>();
+                busLifetimeEvents.BusDisposing += () =>
+                {
+                    syncBus.Unsubscribe<AddToGroup<THub>>();
+                    syncBus.Unsubscribe<RemoveFromGroup<THub>>();
+                    syncBus.Unsubscribe<All<THub>>();
+                    syncBus.Unsubscribe<Connection<THub>>();
+                    syncBus.Unsubscribe<Group<THub>>();
+                    syncBus.Unsubscribe<User<THub>>();
+                };
+
                 var rebusHubLifetimeManager = new RebusHubLifetimeManager<THub>(bus, hubProtocolResolver, logger);
 
                 return rebusHubLifetimeManager;
