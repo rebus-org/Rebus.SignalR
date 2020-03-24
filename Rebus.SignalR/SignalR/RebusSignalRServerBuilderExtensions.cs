@@ -30,15 +30,16 @@ namespace Rebus.SignalR
             signalRServerBuilder.Services.AddSingleton<HubLifetimeManager<THub>, RebusHubLifetimeManager<THub>>(sp => 
             {
                 var bus = sp.GetService<IBus>();
+                var syncBus = bus.Advanced.SyncBus;
                 var hubProtocolResolver = sp.GetService<IHubProtocolResolver>();
                 var logger = sp.GetService<ILogger<RebusHubLifetimeManager<THub>>>();
-
-                bus.Subscribe<AddToGroup<THub>>();
-                bus.Subscribe<RemoveFromGroup<THub>>();
-                bus.Subscribe<All<THub>>();
-                bus.Subscribe<Connection<THub>>();
-                bus.Subscribe<Group<THub>>();
-                bus.Subscribe<User<THub>>();
+                
+                syncBus.Subscribe<AddToGroup<THub>>();
+                syncBus.Subscribe<RemoveFromGroup<THub>>();
+                syncBus.Subscribe<All<THub>>();
+                syncBus.Subscribe<Connection<THub>>();
+                syncBus.Subscribe<Group<THub>>();
+                syncBus.Subscribe<User<THub>>();
 
                 var rebusHubLifetimeManager = new RebusHubLifetimeManager<THub>(bus, hubProtocolResolver, logger);
 
