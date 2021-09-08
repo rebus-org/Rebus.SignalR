@@ -12,7 +12,7 @@
 		-->
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<AssemblyVersion>0.0.5</AssemblyVersion>
+		<AssemblyVersion>0.0.6</AssemblyVersion>
 		<Authors>mookid8000,rsivanov</Authors>
 		<PackageVersion>$(AssemblyVersion)</PackageVersion>
 		<PackageLicenseUrl>https://raw.githubusercontent.com/rebus-org/Rebus/master/LICENSE.md</PackageLicenseUrl>
