@@ -8,11 +8,8 @@
 		If you are using a class library, 
 		we have documentation on how to reference ASP.NET Core from it but it still requires .NET Core 3.0 or higher and does not support .NET Standard.
 		-->
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<AssemblyVersion>0.0.6</AssemblyVersion>
+		<TargetFramework>net5.0</TargetFramework>
 		<Authors>mookid8000,rsivanov</Authors>
-		<PackageVersion>$(AssemblyVersion)</PackageVersion>
 		<PackageProjectUrl>https://rebus.fm/what-is-rebus/</PackageProjectUrl>
 		<PackageDescription>Provides a Rebus-based SignalR backplane</PackageDescription>
 		<Copyright>Copyright Rebus FM ApS 2012</Copyright>
