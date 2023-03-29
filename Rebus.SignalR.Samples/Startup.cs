@@ -33,8 +33,7 @@ namespace Rebus.SignalR.Samples
 
             var rabbitMqOptions = Configuration.GetSection(nameof(RabbitMqOptions)).Get<RabbitMqOptions>();
             
-            var rabbitMqConnectionString =
-                $"amqp://{rabbitMqOptions.User}:{rabbitMqOptions.Password}@{rabbitMqOptions.Host}:{rabbitMqOptions.Port.ToString()}";
+            var rabbitMqConnectionString = $"amqp://{rabbitMqOptions.User}:{rabbitMqOptions.Password}@{rabbitMqOptions.Host}:{rabbitMqOptions.Port.ToString()}";
 
             services.AddRebus(configure => configure
                 .Transport(x =>
@@ -56,8 +55,6 @@ namespace Rebus.SignalR.Samples
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.ApplicationServices.UseRebus();
 
             app.UseStaticFiles();
             app.UseRouting();
