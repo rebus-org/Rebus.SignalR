@@ -57,9 +57,9 @@ public class MulticaseRequestReply : FixtureBase
             })
         );
 
-        var reply1 = await publisher.PublishRequestNew<SingleReply>(new MulticastRequest(IntentedRecipient: 1));
-        var reply2 = await publisher.PublishRequestNew<SingleReply>(new MulticastRequest(IntentedRecipient: 2));
-        var reply3 = await publisher.PublishRequestNew<SingleReply>(new MulticastRequest(IntentedRecipient: 3));
+        var reply1 = await publisher.PublishRequest<SingleReply>(new MulticastRequest(IntentedRecipient: 1));
+        var reply2 = await publisher.PublishRequest<SingleReply>(new MulticastRequest(IntentedRecipient: 2));
+        var reply3 = await publisher.PublishRequest<SingleReply>(new MulticastRequest(IntentedRecipient: 3));
 
         Assert.That(reply1.Replier, Is.EqualTo("subber1"));
         Assert.That(reply2.Replier, Is.EqualTo("subber2"));

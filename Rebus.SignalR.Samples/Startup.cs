@@ -5,8 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rebus.Config;
+using Rebus.Internals;
 using Rebus.Routing.TypeBased;
-using Rebus.ServiceProvider;
 using Rebus.SignalR.Samples.Hubs;
 using Rebus.SignalR.Samples.Options;
 
@@ -45,7 +45,7 @@ namespace Rebus.SignalR.Samples
                         o.SetDurable(false);
                     });
                 })
-                .Options(o => o.EnableSynchronousRequestReply())
+                .Options(o => o.EnableMulticastRequestReply())
                 .Routing(r => r.TypeBased()));
         }
 

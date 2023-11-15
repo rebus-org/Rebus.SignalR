@@ -15,7 +15,8 @@
 ## 0.0.6
 * Update rebus and Rebus.Async dependencies versions
 
-## 1.0.0-alpha01
+## 1.0.0
 * Update to Rebus 8
+* Remove dependency on Rebus.Async and replace by own multicast request/reply mechanism
 
 [rsivanov]: https://github.com/rsivanov

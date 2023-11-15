@@ -13,18 +13,16 @@ namespace Rebus.Internals
     {
         internal const string SpecialCorrelationIdPrefix = "multicast-req-";
 
-        public static async Task<TReply> PublishRequestNew<TReply>(this IBus bus, object request)
+        public static async Task<TReply> PublishRequest<TReply>(this IBus bus, object request, CancellationToken cancellationToken = default)
         {
             if (bus == null) throw new ArgumentNullException(nameof(bus));
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             var correlationId = $"{SpecialCorrelationIdPrefix}{Guid.NewGuid():N}";
 
-            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(2));
-
             var replyHandler = MulticastRequestExtensions.GetReplyHandler<TReply>(correlationId);
 
-            await using var timeoutRegistration = timeout.Token.Register(() => replyHandler.SetCanceled(timeout.Token));
+            await using var timeoutRegistration = cancellationToken.Register(() => replyHandler.SetCanceled(cancellationToken));
 
             // be sure event is published immediately
             using var _ = new RebusTransactionScopeSuppressor();

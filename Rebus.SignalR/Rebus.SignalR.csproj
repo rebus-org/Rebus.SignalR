@@ -41,7 +41,6 @@
 	  </None>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="rebus" Version="8.0.0-alpha01" />
-		<PackageReference Include="Rebus.Async" Version="7.2.0" />
+		<PackageReference Include="rebus" Version="8.0.1" />
 	</ItemGroup>
 </Project>

@@ -85,7 +85,7 @@ namespace Rebus.SignalR
 				_logger.LogInformation("Publishing AddToGroup<THub> {GroupName} message to Rebus for {ConnectionId}.", groupName, connectionId);
 
 				var command = new AddToGroup<THub>(serverName: ServerName, groupName: groupName, connectionId: connectionId);
-				var ack = await _bus.PublishRequest<Ack<THub>>(command, externalCancellationToken: cancellationToken).ConfigureAwait(false);
+				var ack = await _bus.PublishRequest<Ack<THub>>(command, cancellationToken: cancellationToken).ConfigureAwait(false);
 
 				_logger.LogInformation("Received response to AddToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
 			}
@@ -186,7 +186,7 @@ namespace Rebus.SignalR
 				_logger.LogInformation("Publishing RemoveGroup<THub> {GroupName} message to Rebus for {ConnectionId}.", groupName, connectionId);
 
 				var command = new RemoveFromGroup<THub>(serverName: ServerName, groupName: groupName, connectionId: connectionId);
-				var ack = await _bus.PublishRequest<Ack<THub>>(command, externalCancellationToken: cancellationToken).ConfigureAwait(false);
+				var ack = await _bus.PublishRequest<Ack<THub>>(command, cancellationToken: cancellationToken).ConfigureAwait(false);
 
 				_logger.LogInformation("Received response to RemoveFromToGroup<THub> {GroupName} message for {ConnectionId} from {ServerName}.", groupName, connectionId, ack.ServerName);
 			}

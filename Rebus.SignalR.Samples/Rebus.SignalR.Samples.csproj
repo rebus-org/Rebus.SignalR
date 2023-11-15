@@ -3,8 +3,8 @@
 		<TargetFramework>net7.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Rebus.RabbitMq" Version="9.0.0-alpha01" />
-		<PackageReference Include="Rebus.ServiceProvider" Version="10.0.0-alpha01" />
+		<PackageReference Include="Rebus.RabbitMq" Version="9.0.1" />
+		<PackageReference Include="Rebus.ServiceProvider" Version="10.0.0" />
 		<ProjectReference Include="..\Rebus.SignalR\Rebus.SignalR.csproj" />
 	</ItemGroup>
 </Project>
